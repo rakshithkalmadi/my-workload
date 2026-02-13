@@ -18,7 +18,7 @@ jobs:
 
       - name: Clone FaultLine and checkout v0.0.0
         run: |
-          git clone https://github.com/kamath-vinayak/FaultLine.git
+          git clone https://x-access-token:${{ secrets.FL_GITHUB_TOKEN }}@github.com/kamath-vinayak/FaultLine.git
           cd FaultLine
           git checkout v0.0.0
 
