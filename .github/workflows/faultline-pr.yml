@@ -1,0 +1,51 @@
+name: FaultLine PR Run
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  run-faultline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Clone FaultLine and checkout v0.0.0
+        run: |
+          git clone https://github.com/kamath-vinayak/FaultLine.git
+          cd FaultLine
+          git checkout v0.0.0
+
+      - name: Install FaultLine dependencies
+        run: |
+          cd FaultLine
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Write orchestration config and SSH key
+        run: |
+          cd FaultLine
+          mkdir -p .secrets
+          printf "%s" "${{ secrets.FAULTLINE_SSH_KEY }}" > .secrets/id_rsa
+          chmod 600 .secrets/id_rsa
+          printf "%s" "${{ secrets.FAULTLINE_ORCH_CONFIG }}" > config/orchestration.yaml
+
+      - name: Run FaultLine
+        run: |
+          cd FaultLine
+          python faultline.py --config=config/orchestration.yaml
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: faultline-reports
+          path: |
+            FaultLine/reports
+            FaultLine/logs
