@@ -28,13 +28,13 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Write orchestration config and SSH key
+      - name: Write system config and SSH key
         run: |
           cd FaultLine
           mkdir -p .secrets
           printf "%s" "${{ secrets.FAULTLINE_SSH_KEY }}" > .secrets/id_rsa
           chmod 600 .secrets/id_rsa
-          printf "%s" "${{ secrets.FAULTLINE_ORCH_CONFIG }}" > config/orchestration.yaml
+          printf "%s" "${{ secrets.FAULTLINE_SYSTEM_CONFIG }}" > config/system_configuration.yaml
 
       - name: Run FaultLine
         run: |
