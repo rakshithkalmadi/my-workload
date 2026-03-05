@@ -1,3 +1,3 @@
 # Test to integrate faultline 
-Repo integration done.
+Repo integration test done.
 
