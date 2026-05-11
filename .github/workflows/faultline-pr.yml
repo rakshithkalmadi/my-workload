@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Clone FaultLine and checkout v0.0.0
+      - name: Clone FaultLine and checkout main
         run: |
           git clone https://x-access-token:${{ secrets.FL_GITHUB_TOKEN }}@github.com/kamath-vinayak/FaultLine.git
           cd FaultLine
